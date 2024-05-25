@@ -19,7 +19,7 @@ class Product(models.Model):
     unit_price = models.FloatField(verbose_name="Цена")
     created_at = models.DateTimeField(verbose_name="Дата создания записи")
     updated_at = models.DateTimeField(verbose_name="Дата изменений записи")
-    manufactured_at = models.DateTimeField(verbose_name="Дата производства продукта", **NULLABLE)
+
 
     def __str__(self):
         return f"{self.product_name}({self.description})"
@@ -35,7 +35,7 @@ class Categories(models.Model):
     description = models.TextField(verbose_name="Описание категории")
 
     def __str__(self):
-        return f"{self.category_name}({self.description})"
+        return f"{self.category_name}"
 
     class Meta:
         verbose_name = "Категория"
