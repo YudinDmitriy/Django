@@ -3,7 +3,6 @@
 {% block content %}
 <div class="container">
     <div class="row text-center">
-        {% for product in products %}
         <div class="col-3">
             <div class="card mb-4 box-shadow">
                 <img src="{{ product.product_image | media_filter }}">
@@ -11,15 +10,16 @@
                     <h2 class="my-0 font-weight-normal">{{ product.product_name }}</h2>
                 </div>
                 <div class="card-body">
-                    <h4 class="card-title pricing-card-title">{{ product.unit_price | floatformat:0 }} ₽</h4>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li>{{ product.description | truncatechars:100}}</li>
-
+                        <li>{{ product.description }}</li>
                     </ul>
-                    <a class="btn btn-primary" href="{% url 'product_detail' product.pk %}" role="button">Перейти</a>
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <strong>Категория: {{ product.category }}</strong>
+                    </ul>
+                    <h4 class="card-title pricing-card-title">Цена: {{ product.unit_price }} ₽</h4>
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
-    {% endblock%}
+{% endblock %}
