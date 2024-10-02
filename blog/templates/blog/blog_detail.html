@@ -1,0 +1,23 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-6">
+            <div class="col-6">
+                <div class="card mb-4 box-shadow">
+                    <img src="{{ object.preview | media_filter }}">
+                    <div class="card-header">
+                        <h2 class="my-0 font-weight-normal">{{ object.title }} ({{object.slug}})</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                            <li>{{ object.body }}</li>
+                        </ul>
+                        Просмотры: {{object.views_count}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

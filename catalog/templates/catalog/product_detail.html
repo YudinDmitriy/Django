@@ -7,16 +7,16 @@
             <div class="card mb-4 box-shadow">
                 <img src="{{ product.product_image | media_filter }}">
                 <div class="card-header">
-                    <h2 class="my-0 font-weight-normal">{{ product.product_name }}</h2>
+                    <h2 class="my-0 font-weight-normal">{{ object.product_name }}</h2>
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li>{{ product.description }}</li>
+                        <li>{{ object.description }}</li>
                     </ul>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <strong>Категория: {{ product.category }}</strong>
+                        <strong>Категория: {{ object.category }}</strong>
                     </ul>
-                    <h4 class="card-title pricing-card-title">Цена: {{ product.unit_price }} ₽</h4>
+                    <h4 class="card-title pricing-card-title">Цена: {{ object.unit_price }} ₽</h4>
                     <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
                 </div>
             </div>
