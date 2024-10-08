@@ -17,8 +17,8 @@ class Product(models.Model):
         related_name="products",
     )
     unit_price = models.FloatField(verbose_name="Цена")
-    created_at = models.DateTimeField(verbose_name="Дата создания записи")
-    updated_at = models.DateTimeField(verbose_name="Дата изменений записи")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания записи")
+    updated_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата изменений записи")
 
     def __str__(self):
         return f"{self.product_name}({self.description})"

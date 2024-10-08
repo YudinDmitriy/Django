@@ -1,9 +1,12 @@
 from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+
+from catalog.forms import ProductForm
 from catalog.models import Product
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
 
-class HomeListView(ListView):
+class ProductListView(ListView):
     model = Product
 
 
@@ -26,4 +29,20 @@ class ContactsTemplateView(TemplateView):
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'catalog/product_detail.html'
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('product:list')
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('product:list')
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('product:list')
