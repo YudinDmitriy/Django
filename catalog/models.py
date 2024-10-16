@@ -17,8 +17,8 @@ class Product(models.Model):
         related_name="products",
     )
     unit_price = models.FloatField(verbose_name="Цена")
-    created_at = models.DateTimeField(verbose_name="Дата создания записи")
-    updated_at = models.DateTimeField(verbose_name="Дата изменений записи")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания записи")
+    updated_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата изменений записи")
 
     def __str__(self):
         return f"{self.product_name}({self.description})"
@@ -40,3 +40,18 @@ class Categories(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
         ordering = ["category_name"]
+
+
+class Version(models.Model):
+    version_name = models.CharField(max_length=50, verbose_name="Название версии")
+    version_number = models.PositiveIntegerField(default=0, verbose_name='Номер версии')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="продукт", **NULLABLE,)
+    current_version_indicator = models.BooleanField(default=True, verbose_name='Индикатор текущей версии')
+
+    def __str__(self):
+        return f"{self.version_name}"
+
+    class Meta:
+        verbose_name = "Версия"
+        verbose_name_plural = "Версии"
+        ordering = ["version_name"]
