@@ -26,6 +26,16 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
 
         return cleaned_data
 
+    def clean_description(self):
+        cleaned_data = self.cleaned_data['description']
+
+        if cleaned_data.lower() in ('казино', 'криптовалюта', 'крипта',
+                                    'биржа', 'дешево', 'бесплатно', 'обман',
+                                    'полиция', 'радар'):
+            raise forms.ValidationError('Недопустимые слова в описании')
+
+        return cleaned_data
+
 
 class VersionForm(forms.ModelForm):
 

@@ -17,6 +17,8 @@
                     <h4 class="card-title pricing-card-title">{{ product.unit_price | floatformat:0 }} ₽</h4>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li>{{ product.description | truncatechars:100}}</li>
+                        <li>Версия: {{ product.active_version }}</li>
+                        <li>Номер версии: {{ product.num_version }}</li>
 
                     </ul>
                     <a class="btn btn-primary" href="{% url 'product:product_detail' product.pk %}" role="button">Перейти</a>
