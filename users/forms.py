@@ -12,11 +12,9 @@ class UsersRegisterForm(UserCreationForm):
 
 
 class UserProfileForm(UserChangeForm):
+    password = None
 
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'phone', 'avatar')
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.fields['password'].widget = forms.HiddenInput()
