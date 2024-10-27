@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -5,6 +6,8 @@ from django.urls import reverse_lazy
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Product, Version
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
+
+from users.models import User
 
 
 class ProductListView(ListView):
@@ -46,14 +49,16 @@ class ContactsTemplateView(TemplateView):
         return HttpResponseRedirect("/contacts")
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
+    login_url = "users:login"
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("product:list")
+    login_url = "users:login"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -74,10 +79,11 @@ class ProductCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("product:list")
+    login_url = "users:login"
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -98,6 +104,7 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy("product:list")
+    login_url = "users:login"

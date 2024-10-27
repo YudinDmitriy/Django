@@ -5,7 +5,7 @@ from django.contrib.auth.views import PasswordResetView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, TemplateView
 
 from users.forms import UsersRegisterForm, UserProfileForm
 from users.models import User
@@ -59,18 +59,25 @@ class UserPasswordResetView(PasswordResetView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        user = User.objects.get(email=email)
-        if user:
-            password = User.objects.make_random_password(
-                length=10,
-                allowed_chars="abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789")
-            user.set_password(password)
-            user.save()
-            send_mail(
-                subject='Сброс пароля',
-                message=f'Ваш новый пароль:{password}',
-                from_email=EMAIL_HOST_USER,
-                recipient_list=[user.email]
-            )
-            return redirect(reverse('users:login'))
+        try:
+            user = User.objects.get(email=email)
+            if user:
+                password = User.objects.make_random_password(
+                    length=10,
+                    allowed_chars="abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789")
+                user.set_password(password)
+                user.save()
+                send_mail(
+                    subject='Сброс пароля',
+                    message=f'Ваш новый пароль:{password}',
+                    from_email=EMAIL_HOST_USER,
+                    recipient_list=[user.email]
+                )
+                return redirect(reverse('users:login'))
+        except:
+            return redirect(reverse('users:error-reset-password'))
 
+
+class ErrorUserPasswordReset(TemplateView):
+
+    template_name = 'users/error_password_reset_email.html'
