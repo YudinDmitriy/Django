@@ -75,8 +75,13 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
-
-        return super().form_valid(form)
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            self.object.creator = self.request.user.email
+            self.object.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
