@@ -1,12 +1,15 @@
 from django.db import models
 
+from config import settings
+
 NULLABLE = {"blank": True, "null": True}
 
 
 class Product(models.Model):
     product_name = models.CharField(max_length=50, verbose_name="Название продукта")
     description = models.TextField(verbose_name="Описание продукта")
-    # creator = models.TextField(verbose_name="Создатель", **NULLABLE)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+                                verbose_name='Владелец', **NULLABLE)
     product_image = models.ImageField(
         upload_to="products/", verbose_name="Изображение", **NULLABLE
     )
@@ -20,6 +23,7 @@ class Product(models.Model):
     unit_price = models.FloatField(verbose_name="Цена")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания записи")
     updated_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата изменений записи")
+    is_active = models.BooleanField(default=False, verbose_name='Признак публикации')
 
     def __str__(self):
         return f"{self.product_name}({self.description})"
@@ -28,6 +32,11 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["category", "product_name", "unit_price"]
+        permissions = [
+            ('can_edit_activity', 'Can on/off is_activite'),
+            ('can_edit_description', 'Can edit description'),
+            ('can_edit_category', 'Can edit category')
+        ]
 
 
 class Categories(models.Model):
