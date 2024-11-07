@@ -14,7 +14,7 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('product_name', 'description', 'product_image', 'category', 'unit_price')
+        fields = ('product_name', 'description', 'product_image', 'category', 'unit_price', 'is_active')
 
     def clean_product_name(self):
         cleaned_data = self.cleaned_data['product_name']
@@ -35,6 +35,18 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
             raise forms.ValidationError('Недопустимые слова в описании')
 
         return cleaned_data
+
+
+class ProductModerForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'category', 'is_active')
+
+
+class ProductContentManageForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('is_active',)
 
 
 class VersionForm(forms.ModelForm):

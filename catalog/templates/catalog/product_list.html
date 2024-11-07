@@ -28,8 +28,13 @@
                         </ul>
                     </ul>
                     <a class="btn btn-primary" href="{% url 'product:product_detail' product.pk %}" role="button">Перейти</a>
+                    {% if perms.catalog.can_edit_activity and perms.catalog.can_edit_description and perms.catalog.can_edit_category or user == product.creator or user.is_superuser or perms.catalog.can_edit_activity %}
                     <a class="btn btn-primary" href="{% url 'product:update' product.pk %}" role="button">Изменить</a>
+                    {% endif %}
+                    {% if user.is_superuser or user == product.creator%}
                     <a class="btn btn-primary" href="{% url 'product:delete' product.pk %}" role="button">Удалить</a>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

@@ -1,9 +1,10 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductModerForm, ProductContentManageForm
 from catalog.models import Product, Version
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
@@ -77,7 +78,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             formset.save()
         if form.is_valid():
             self.object = form.save(commit=False)
-            self.object.creator = self.request.user.email
+            self.object.creator = self.request.user
             self.object.save()
             return super().form_valid(form)
         else:
@@ -89,6 +90,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProductForm
     success_url = reverse_lazy("product:list")
     login_url = "users:login"
+    perms = ('catalog.can_edit_activity', 'catalog.can_edit_description', 'catalog.can_edit_category')
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -107,6 +109,16 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             formset.save()
 
         return super().form_valid(form)
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.creator or user.is_superuser:
+            return ProductForm
+        if user.has_perms(perm_list=self.perms):
+            return ProductModerForm
+        if user.has_perm('catalog.can_edit_activity'):
+            return ProductContentManageForm
+        raise PermissionDenied
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
