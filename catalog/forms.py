@@ -10,7 +10,7 @@ class StyleFormMixin:
             field.widget.attrs['class'] = 'form-control'
 
 
-class ProductForm(StyleFormMixin, forms.ModelForm):
+class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
@@ -37,7 +37,7 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         return cleaned_data
 
 
-class ProductModerForm(StyleFormMixin, forms.ModelForm):
+class ProductModerForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('description', 'category', 'is_active')
