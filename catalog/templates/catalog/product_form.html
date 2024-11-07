@@ -1,5 +1,7 @@
 {% extends 'catalog/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
     <div class="container">
         <form class="row" method="post" enctype="multipart/form-data">
@@ -12,7 +14,7 @@
                     </div>
                     <div class="card-body">
                             {% csrf_token %}
-                            {{ form.as_p }}
+                            {{ form|crispy }}
 
                             <button type="submit" class="btn btn-success">
                                 {% if object %}
@@ -26,6 +28,7 @@
                     </div>
                 </div>
             </div>
+            {% if user.is_superuser or user == product.creator%}
              <div class="col-6">
                     <div class="card">
                          <div class="card-header">
@@ -36,12 +39,13 @@
                         <div class="card-body">
                             {{ formset.management_form }}
                             {% for form in formset.forms %}
-                                {{ form.as_p }}
+                                {{ form|crispy }}
                             {% endfor %}
                         </div>
                     </div>
 
                 </div>
+            {% endif %}
         </form>
     </div>
 {% endblock %}
