@@ -8,6 +8,7 @@ from catalog.forms import ProductForm, VersionForm, ProductModerForm, ProductCon
 from catalog.models import Product, Version
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 
+from catalog.services.services import get_categories_from_cache
 from users.models import User
 
 
@@ -29,6 +30,8 @@ class ProductListView(ListView):
                     .version_number
                 )
                 obj.save()
+
+        context['categories'] = get_categories_from_cache()
 
         return context
 
